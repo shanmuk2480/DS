@@ -1,0 +1,200 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct BST
+{
+    int data;
+    struct BST*left,*right;
+};
+typedef struct BST node;
+node*p;
+node*insert(node*p,int x)
+{
+    node*new;
+    if(p==NULL)
+    {
+        new=(node*)malloc(sizeof(node));
+        new->data=x;
+        new->left=new->right=NULL;
+        p=new;
+    }
+    else if(x<=p->data)
+    {
+        p->left=insert(p->left,x);
+    }
+    else if(x>p->data)
+    {
+        p->right=insert(p->right,x);
+    }
+    return p;
+}
+void inorder(node*p)
+{
+    if(p!=NULL)
+    {
+        inorder(p->left);
+        printf("%d\t",p->data);
+        inorder(p->right);
+    }
+}
+void preorder(node*p)
+{
+    if(p!=NULL)
+    {
+        printf("%d",p->data);
+        preorder(p->left);
+        preorder(p->right);
+    }
+}
+void postorder(node*p)
+{
+    if(p!=NULL)
+    {
+        preorder(p->left);
+        preorder(p->right);
+        printf("%d",p->data);
+    }
+}
+node*min(node*p)
+{
+    if(p!=NULL)
+    {
+        while(p->left!=NULL)
+        {
+            p=p->left;
+        }
+        return p;
+    }
+
+}
+node*max(node*p)
+{
+    if(p!=NULL)
+    {
+        while(p->right!=NULL)
+        {
+            p=p->right;
+        }
+          return p;
+    }
+  
+}
+node*search(node*p,int x)
+{
+    if(p==NULL)
+    {
+        return p;
+    }
+    else if(x>p->data)
+    {
+        return (search(p->left,x));
+    }
+    else if(x>p->data)
+    {
+        return (search(p->right,x));
+    }
+    else
+    {
+        return p;
+    }
+}
+node*delete(node*p,int x)
+{
+    node*temp;
+    if(p==NULL)
+    {
+        return p;
+    }
+    else if(x<p->data)
+    {
+        p->left=delete(p->left,x);
+    }
+    else if(x>p->data)
+    {
+        p->right=delete(p->right,x);
+    }
+    else if(p->left!=NULL && p->right!=NULL)
+    {
+        x=p->data=min(p->right)->data;
+        p->right=delete(p->right,x);
+    }
+    else
+    {
+        temp=p;
+        if(p->right==NULL)
+        {
+            p=p->left;
+        }
+        else if(p->left==NULL)
+        {
+            p=p->right;
+            free(temp);
+        }
+        return p;
+    }
+}
+void main()
+{
+   node*root=NULL,*temp;
+   int x,ch;
+   while(1)
+  {
+    printf("\n 1.Insert \n 2.Inorder \n 3. Preorder \n 4.Postorder \n 5.Minimum \n 6. Maximum \n 7.Search \n 8. Delete \n");
+    printf("\n Enter your choice:");
+    scanf("%d",&ch);
+    switch(ch)
+    {
+       case 1:printf("\n Enter the element into BST:");
+              scanf("%d",&x);
+              root=insert(root,x);
+              break;
+       case 2:printf("\n The inorder traversal of BST is:");
+              inorder(root);
+              break;
+       case 3:printf("\n The pre order traversal of BST is:");
+              preorder(root);
+              break;
+       case 4:printf("\n The post order traversal of BST is:");
+              postorder(root);
+              break;
+       case 5:temp=min(root);
+              if(temp==NULL)
+              {
+                  printf("No tree is created");
+              }
+              else
+              {
+                  printf("Minimum value=%d",temp->data);
+              }
+              break;
+       case 6:temp=max(root);
+              if(temp==NULL)
+              {
+                  printf("No tree is created");
+              }
+              else
+              {
+                  printf("Maximum value=%d",temp->data);
+              }
+              break;
+       case 7:printf("\n Enter the element to search:");
+              scanf("%d",&x);
+              temp=search(p,x);
+              if(temp==NULL)
+              {
+                  printf("\n The element %d is not found",x);
+              }
+              else
+              {
+                  printf("\n The element %d is found",x);
+              }
+              break;
+       case 8:printf("\n Enter element to delete:");
+              scanf("%d",&x);
+              root=delete(root,x);
+              break;
+       case 9:exit(0);
+              break;
+      default:printf("\n Check choice");
+    }
+  }
+}
