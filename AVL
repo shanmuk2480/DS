@@ -1,0 +1,172 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct AVL
+{
+    int data,ht;
+    struct AVL *left,*right;
+};
+typedef struct AVL node;
+
+void main()
+{
+  node*root=NULL,*temp;
+  int x,ch;
+  while(1)
+  {
+     printf("\n 1.Insert \n 2.Inorder \n 3.preorder \n4.postorder \n 5.exit");
+     printf("\n Enter your choice:");
+     scanf("%d",&ch);
+     switch(ch)
+     {
+         case 1:printf("\n Enter the element into AVL:");
+                scanf("%d",&x);
+                root=insert(root,x);
+                break;
+         case 2:printf("\n The inorder traversal of AVL is:");
+                inorder(root);
+                break;
+         case 3:printf("\n The pre order traversal of AVL is:");
+                preorder(root);
+                break;
+         case 4:printf("\n The post order traversal of AVL is:");
+                postorder(root);
+                break;
+        case 5:exit(0);
+               break;
+        default:printf("\n Entered wrong choice");
+     }
+  }
+}
+int max(int a,int b)
+{
+    return (a>b?a:b);
+}
+int height(node*p)
+{
+    if(p==NULL)
+    {
+        return-1;
+    } 
+    else
+    {
+        return(max(height(p->left),height(p->right)+1));
+    }
+}
+node*insert(node*p,int x)
+{
+   if(p==NULL)
+   {
+        p=(node*)malloc(sizeof(node));
+        p->data=x;
+        p->ht=0;
+        p->left=p->right=NULL;
+   }
+   else if(x<p->data)
+   {
+      p->left=insert(p->left,x);
+      if(abs(height(p->left)-height(p->right))==2)
+      {
+        if(x<p->left->data)
+        {
+          p=single_LL(p);
+        }
+        else
+        {
+            p=double_LR(p);
+        }
+      }
+  }
+  else if(x>p->data)
+  {
+        p->right=insert(p->right,x);
+        if(abs(height(p->left)-height(p->right))==2)
+        {
+           if(x>p->right->data)
+           {
+                p=single_RR(p);
+           }
+           else
+           {
+              p=double_RL(p);
+           }
+        }
+  }
+ p->ht=max(height(p->left),height(p->right))+1;
+ return p;
+}
+node*singleLL(node*k2)
+{
+  node*k1=k2->left;
+  k2->left=k1->right;
+  k1->right=k2;
+  k2->ht=max(height(k2->left),(k2->right))+1;
+  k1->ht=max(height(k1->left),(k1->right))+1;
+  return k1;
+}
+node*singleRR(node*k1)
+{
+   node*k2=k1->right;
+   k1->right=k2->left;
+   k2->left=k1;
+   k1->ht=max(height(k1->left),height(k1->right))+1;
+   k2->ht=max(height(k2->left),height(k2->right))+1;
+   return k2;
+}
+node*doubleLR(node*k3)
+{
+    k3->left=singleRR(k3->left);
+    return(singleLL(k3));
+}
+node*doubleRL(node*k1)
+{
+    k1->right=singleLL(k1->right);
+    return (singleRR(k1));
+}
+void inorder(node*p)
+{
+     inorder(p->left);
+     printf("%d\t",p->data);
+     inorder(p->right);
+}
+void preorder(node*p)
+{
+   if(p!=NULL)
+   {
+      printf("%d\t",p->data);
+      preorder(p->left);
+      preorder(p->right);
+   }
+}
+void postorder(node*p)
+{
+   if(p!=NULL)
+   {
+      postorder(p->left);
+      postorder(p->right);
+      printf("%d\t",p->data);
+   }
+}
+node*findmin(node*p)
+{
+    if(p!=NULL)
+    {
+        while(p->left!=NULL)
+        {
+            p=p->left;
+        }
+      return p;  
+    }
+}
+node*findmax(node*p)
+{
+    if(p!=NULL)
+    {
+        while(p->right!=NULL)
+        {
+            p=p->right;
+        }
+        return p;
+    }
+}
+
+
