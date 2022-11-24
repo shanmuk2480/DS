@@ -1,0 +1,121 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX 20
+
+int a[MAX],f=-1,r=-1;
+
+void enqueue(int x)
+{
+    if((f==0 && r==MAX-1) || (f==r+1))
+    {
+        printf("Queue overflown");
+    }
+    else
+    {
+        if (f==-1)
+        {
+            f=r=0;
+        }
+        else if(r==MAX-1)
+        {
+            r=0;
+        }
+        else
+        {
+           ++r; 
+        }
+        a[r]=x;
+    }
+}
+
+int dequeue()
+{
+    int x;
+    if (f==-1)
+    {
+        return -1;
+    }
+    else
+    {
+        x=a[f];
+        if(f==x)
+        {
+            f=r-1;
+        }
+        else if(f==MAX-1)
+        {
+            f=0;
+        }
+        else
+        {
+            ++f;
+        }
+        return x;
+    }
+}
+void display()
+{
+    int i,flag;
+    if(flag==-1)
+    {
+        printf("Queue is empty");
+    }
+    else
+    {
+        if(f<=r)
+        {
+            for(i=f;i<=r;i++)
+            {
+                printf("%d\n",a[i]);
+            
+            }
+        }
+        else
+        {
+            for(i=f;i<=MAX-1;i++)
+            {
+                printf("%d\t",a[i]);
+            }
+            for(i=0;i<=r;i++)
+            {
+                printf("%d\t",a[i]);
+            }
+        }
+    
+    }
+}
+
+void main()
+{
+    int ch,x;
+    while(1)
+    {
+        printf("\n 1.insert \n 2.delete \n 3.display \n 4.exit");
+        printf("\n Enter your choice:");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1:printf("\n Enter the element to insert:");
+                   scanf("%d",&x);
+                   enqueue(x);
+                   break;
+            case 2:x=dequeue();
+                   if(x==-1)
+                   {
+                       printf("Queue is underflow");
+                   }
+                   else
+                   {
+                       printf("Element deleted=%d",x);
+                   }
+                   break;
+            case 3:printf("\n The elements in queue are:\n");
+                   display();
+                   break;
+            case 4:exit(0);
+                   break;
+            default:printf("\n Entered wrong choice");
+        }
+       
+    }
+}
