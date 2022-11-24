@@ -1,0 +1,103 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct queue
+{
+    int data;
+    struct queue*next;
+};
+typedef struct queue node;
+node*front=NULL;
+node*rear=NULL;
+
+void enqueue(int x)
+{
+    node*new;
+    new = (node*)malloc(sizeof(node));
+    new->data=x;
+    new->next=NULL;
+    if(front==NULL)
+    {
+        front=rear=new;
+    }
+    else
+    {
+        rear->next=new;
+        rear=new;
+    }
+}
+int dequeue()
+{
+    int x;
+    node*temp;
+    if(front==NULL)
+    return -1;
+    else
+    {
+        x=front->data;
+        if(front==rear)
+        {
+            front=rear=NULL;
+        }
+        else
+        {
+            temp=front;
+            front=front->next;
+            free(temp);
+        }
+        return x;
+    }
+}
+void display()
+{
+    node*temp;
+    if(front==NULL)
+    {
+        printf("Queue is empty");
+    }
+    else
+    {
+        temp=front;
+        while(temp!=NULL)
+        {
+            printf("%d\t",temp->data);
+            temp=temp->next;
+        }
+    }
+}
+
+void main()
+{
+    int ch,x;
+    while(1)
+    {
+        printf("\n1.insert \n.2.delete \n3.display \n4.exit");
+        printf("Enter your choice=");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1: printf("Enter element to insert\n");
+            scanf("%d",&x);
+            enqueue(x);
+            break;
+            
+            case 2: x=dequeue(x);
+              if(x==-1)
+            {
+                printf("Stack underflow");
+            }
+            else
+            {
+                printf("element deleted=%d",x);
+            }
+            break;
+            
+            case 3: printf("Elements in list are=\n");
+            display();
+            break;
+            
+            case 4:exit(0);
+        }
+    }
+}
+
